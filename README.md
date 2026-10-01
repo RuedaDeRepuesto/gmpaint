@@ -49,6 +49,19 @@ npm run tauri:dev
 npm run tauri:build
 ```
 
+### 3. Despliegue en GitHub Pages 🚀
+El proyecto está configurado para compilarse y desplegarse automáticamente en la rama `gh-pages`:
+
+- **Automático (CI/CD)**: Cada vez que haces `push` a la rama `main`, la GitHub Action (`.github/workflows/deploy.yml`) compila el bundle estático y lo sube directamente a la rama `gh-pages`.
+- **Manual desde consola**: Si prefieres subirlo a mano:
+  ```bash
+  npm run deploy
+  ```
+- **Configuración en el repositorio de GitHub**:
+  En **Settings** > **Pages** de tu repo en GitHub:
+  - Source: **Deploy from a branch**
+  - Branch: **`gh-pages`** / Folder: **`/ (root)`**
+
 ---
 
 ## 🧠 Detalles Técnicos de la Implementación

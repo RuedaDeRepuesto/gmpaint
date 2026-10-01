@@ -96,6 +96,10 @@ Los colores y tamaño se configuran desde `GridSettingsDialog` y se persisten en
 ## 5. Comandos de Desarrollo y Compilación
 
 - `npm run dev`: Inicia el servidor de desarrollo web con Vite en `http://localhost:5173/`.
-- `npm run build`: Valida TypeScript con `tsc` y compila la versión web a `dist/`.
+- `npm run build`: Valida TypeScript con `tsc` y compila la versión web a `dist/` (con `base: './'`).
+- `npm run deploy`: Compila y despliega manualmente la carpeta `dist/` a la rama `gh-pages` con el paquete `gh-pages`.
 - `npm run tauri:dev`: Lanza la aplicación nativa en ventana de escritorio con recarga en vivo (requiere tener Rust en PATH: `source "$HOME/.cargo/env"`).
 - `npm run tauri:build`: Compila y genera el empaquetado nativo (ej. `.app` y `.dmg` en macOS en `src-tauri/target/release/bundle/`).
+
+### Despliegue Continuo (CI/CD)
+El archivo `.github/workflows/deploy.yml` ejecuta automáticamente el build y despliegue a la rama `gh-pages` con `JamesIves/github-pages-deploy-action@v4` en cada `push` a la rama `main`.
