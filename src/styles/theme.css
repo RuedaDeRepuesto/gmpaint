@@ -1,0 +1,121 @@
+:root {
+  /* =========================================================
+     THEME: GameMaker 8 Classic (Win32 / Delphi Classic UI)
+     Optimizado con variables semánticas para permitir modernizar
+     el aspecto y la disposición en futuras iteraciones.
+     ========================================================= */
+  --font-family: 'MS Sans Serif', Tahoma, 'Segoe UI', sans-serif;
+  --font-size: 11px;
+  --font-size-small: 10px;
+
+  /* Colores de UI */
+  --ui-bg: #ece9d8;
+  --ui-bg-light: #ffffff;
+  --ui-bg-dark: #707070;
+  --ui-text: #000000;
+  --ui-text-muted: #555555;
+  --ui-text-disabled: #888888;
+  --ui-highlight: #316ac5;
+  --ui-highlight-text: #ffffff;
+
+  /* Biseles clásicos 3D Outset (botones, bordes de ventana) */
+  --border-light: #ffffff;
+  --border-mid-light: #dfdfdf;
+  --border-mid-dark: #808080;
+  --border-dark: #000000;
+
+  --border-outset: 1px solid var(--border-light);
+  --border-outset-shadow: inset 1px 1px 0px var(--border-light),
+                          inset -1px -1px 0px var(--border-mid-dark),
+                          1px 1px 0px var(--border-dark);
+
+  /* Biseles clásicos 3D Inset (campos de texto, lienzos, preview de color) */
+  --border-inset-shadow: inset 1px 1px 0px var(--border-mid-dark),
+                         inset -1px -1px 0px var(--border-light),
+                         inset 2px 2px 0px var(--border-dark);
+
+  --bevel-btn-normal: inset 1px 1px 0 var(--border-light),
+                      inset -1px -1px 0 var(--border-mid-dark);
+  --bevel-btn-pressed: inset 1px 1px 0 var(--border-mid-dark),
+                       inset -1px -1px 0 var(--border-light);
+
+  --border-radius: 0px;
+  --panel-padding: 4px;
+  --canvas-viewport-bg: #5a5d62;
+
+  --titlebar-bg-from: #0a246a;
+  --titlebar-bg-to: #a6caf0;
+  --titlebar-text: #ffffff;
+}
+
+/* Base reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  background-color: #2b2b2b;
+  color: var(--ui-text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border-dark);
+  background: var(--ui-bg);
+  box-shadow: var(--border-outset-shadow);
+  padding: 2px 6px;
+  outline: none;
+}
+
+button:active,
+button.active {
+  background: #ded9c7;
+  box-shadow: var(--bevel-btn-pressed);
+}
+
+button:disabled {
+  color: var(--ui-text-disabled);
+  cursor: default;
+  opacity: 0.6;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+  font-family: inherit;
+  font-size: inherit;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid var(--border-mid-dark);
+  box-shadow: inset 1px 1px 1px rgba(0,0,0,0.4);
+  padding: 2px 4px;
+  outline: none;
+}
+
+fieldset {
+  border: 1px solid var(--border-mid-dark);
+  padding: 4px 6px 6px 6px;
+  margin: 2px 0;
+  box-shadow: 1px 1px 0px var(--border-light);
+}
+
+legend {
+  padding: 0 4px;
+  font-size: var(--font-size);
+  font-weight: 500;
+  color: var(--ui-text);
+}

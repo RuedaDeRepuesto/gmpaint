@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Editor: sprite0</title>
+  <link rel="stylesheet" href="/src/styles/theme.css" />
+  <link rel="stylesheet" href="/src/styles/layout.css" />
+  <link rel="stylesheet" href="/src/styles/dialogs.css" />
+</head>
+<body>
+  <div class="app-window" id="app-window">
+    <!-- Barra de título clásica estilo GameMaker 8 -->
+    <div class="window-titlebar">
+      <div class="mac-window-controls">
+        <span class="mac-dot close"></span>
+        <span class="mac-dot min"></span>
+        <span class="mac-dot max"></span>
+      </div>
+      <div class="titlebar-text" id="window-title">Image Editor: sprite0</div>
+      <div style="width: 50px;"></div>
+    </div>
+
+    <!-- Barra de menú superior (File, Edit, View, Transform, Image) -->
+    <div id="menubar-container"></div>
+
+    <!-- Barra de herramientas de acciones rápidas -->
+    <div id="toolbar-container"></div>
+
+    <!-- Área de trabajo central -->
+    <div class="workspace-body">
+      <!-- Paleta izquierda de herramientas y tamaño de pincel -->
+      <div id="toolpalette-container"></div>
+
+      <!-- Visor central del lienzo con zoom y desplazamiento -->
+      <div class="viewport-container" id="viewport-container"></div>
+
+      <!-- Panel derecho de colores, opacidad y modos Blend/Replace -->
+      <div id="colorpanel-container"></div>
+    </div>
+
+    <!-- Barra de estado inferior con coordenadas y tamaño -->
+    <div id="statusbar-container"></div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
