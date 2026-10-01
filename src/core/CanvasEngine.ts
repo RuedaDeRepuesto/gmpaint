@@ -45,6 +45,7 @@ export class CanvasEngine {
   private marchOffset: number = 0;
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private checkerPattern: CanvasPattern | null = null;
 
   private listeners: Set<ViewportListener> = new Set();
 
@@ -246,12 +247,12 @@ export class CanvasEngine {
     this.ctx.fillStyle = '#6e7074';
     this.ctx.fillRect(0, 0, width, height);
 
+    // 1. Fondo de transparencia o color sólido en espacio de pantalla (tamaño constante)
+    this.renderBackground();
+
     this.ctx.save();
     this.ctx.translate(this.panX, this.panY);
     this.ctx.scale(this.zoom, this.zoom);
-
-    // 1. Fondo de transparencia o color sólido
-    this.renderBackground();
 
     // 2. Imagen principal
     this.renderImageBuffer();
@@ -274,23 +275,47 @@ export class CanvasEngine {
   }
 
   private renderBackground(): void {
+    const screenX = Math.round(this.panX);
+    const screenY = Math.round(this.panY);
+    const screenW = Math.round(this.width * this.zoom);
+    const screenH = Math.round(this.height * this.zoom);
+
     if (this.backgroundType === 'solid') {
       this.ctx.fillStyle = this.solidBgColor;
-      this.ctx.fillRect(0, 0, this.width, this.height);
-      return;
+      this.ctx.fillRect(screenX, screenY, screenW, screenH);
+    } else {
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.rect(screenX, screenY, screenW, screenH);
+      this.ctx.clip();
+
+      // El patrón de ajedrez se ancla al lienzo pero sus celdas tienen tamaño fijo en pantalla (8px)
+      this.ctx.translate(screenX, screenY);
+      this.ctx.fillStyle = this.getCheckerPattern();
+      this.ctx.fillRect(0, 0, screenW, screenH);
+      this.ctx.restore();
     }
 
-    // Cuadrícula clásica de ajedrez (8x8 píxeles lógicos por celda o 1px si es muy chico)
-    const tileSize = 8;
-    for (let y = 0; y < this.height; y += tileSize) {
-      for (let x = 0; x < this.width; x += tileSize) {
-        const isEven = (Math.floor(x / tileSize) + Math.floor(y / tileSize)) % 2 === 0;
-        this.ctx.fillStyle = isEven ? '#ffffff' : '#cccccc';
-        const w = Math.min(tileSize, this.width - x);
-        const h = Math.min(tileSize, this.height - y);
-        this.ctx.fillRect(x, y, w, h);
-      }
+    // Borde delimitador sutil de 1px alrededor del lienzo
+    this.ctx.strokeStyle = '#000000';
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeRect(screenX - 0.5, screenY - 0.5, screenW + 1, screenH + 1);
+  }
+
+  private getCheckerPattern(): CanvasPattern {
+    if (!this.checkerPattern) {
+      const patternCanvas = document.createElement('canvas');
+      patternCanvas.width = 16;
+      patternCanvas.height = 16;
+      const pCtx = patternCanvas.getContext('2d')!;
+      pCtx.fillStyle = '#ffffff';
+      pCtx.fillRect(0, 0, 16, 16);
+      pCtx.fillStyle = '#dcdcdc';
+      pCtx.fillRect(0, 0, 8, 8);
+      pCtx.fillRect(8, 8, 8, 8);
+      this.checkerPattern = this.ctx.createPattern(patternCanvas, 'repeat')!;
     }
+    return this.checkerPattern;
   }
 
   private renderImageBuffer(): void {
