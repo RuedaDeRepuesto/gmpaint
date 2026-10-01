@@ -4,6 +4,7 @@ import { HistoryManager } from '../core/HistoryManager.ts';
 import { SelectionManager } from '../core/SelectionManager.ts';
 import { ClipboardManager } from '../core/ClipboardManager.ts';
 import { flipHorizontal, flipVertical, invertColors, rotate90CCW, rotate90CW } from '../core/PixelOps.ts';
+import { i18n, t } from '../i18n/i18n.ts';
 
 export interface AppActions {
   onNew: () => Promise<void>;
@@ -41,6 +42,11 @@ export class MenuBar {
 
     this.renderMenus(engine, historyManager, selectionManager, clipboardManager, actions);
     this.initGlobalShortcuts(actions);
+
+    i18n.subscribe(() => {
+      this.element.innerHTML = '';
+      this.renderMenus(engine, historyManager, selectionManager, clipboardManager, actions);
+    });
   }
 
   private renderMenus(
@@ -50,50 +56,52 @@ export class MenuBar {
     _clipboardManager: ClipboardManager,
     actions: AppActions
   ): void {
+    const isEs = i18n.getLanguage() === 'es';
+
     const menus = [
       {
-        title: 'File',
+        title: t('menu.file'),
         items: [
-          { label: 'New...', shortcut: 'Ctrl+N', action: () => actions.onNew() },
-          { label: 'Open...', shortcut: 'Ctrl+O', action: () => actions.onOpen() },
-          { label: 'Save...', shortcut: 'Ctrl+S', action: () => actions.onSave() },
-          { label: 'Insert from file...', action: () => actions.onInsertFromFile() },
+          { label: t('menu.new'), shortcut: 'Ctrl+N', action: () => actions.onNew() },
+          { label: t('menu.open'), shortcut: 'Ctrl+O', action: () => actions.onOpen() },
+          { label: t('menu.save'), shortcut: 'Ctrl+S', action: () => actions.onSave() },
+          { label: t('menu.insert'), action: () => actions.onInsertFromFile() },
           { separator: true },
-          { label: 'Exit', action: () => window.close() }
+          { label: t('menu.exit'), action: () => window.close() }
         ]
       },
       {
-        title: 'Edit',
+        title: t('menu.edit'),
         items: [
-          { label: 'Undo', shortcut: 'Ctrl+Z', action: () => actions.onUndo() },
-          { label: 'Redo', shortcut: 'Ctrl+Y', action: () => actions.onRedo() },
+          { label: t('menu.undo'), shortcut: 'Ctrl+Z', action: () => actions.onUndo() },
+          { label: t('menu.redo'), shortcut: 'Ctrl+Y', action: () => actions.onRedo() },
           { separator: true },
-          { label: 'Cut', shortcut: 'Ctrl+X', action: () => actions.onCut() },
-          { label: 'Copy', shortcut: 'Ctrl+C', action: () => actions.onCopy() },
-          { label: 'Paste', shortcut: 'Ctrl+V', action: () => actions.onPaste() },
+          { label: t('menu.cut'), shortcut: 'Ctrl+X', action: () => actions.onCut() },
+          { label: t('menu.copy'), shortcut: 'Ctrl+C', action: () => actions.onCopy() },
+          { label: t('menu.paste'), shortcut: 'Ctrl+V', action: () => actions.onPaste() },
           { separator: true },
-          { label: 'Delete', shortcut: 'Del', action: () => actions.onDelete() },
-          { label: 'Select All', shortcut: 'Ctrl+A', action: () => actions.onSelectAll() }
+          { label: t('menu.delete'), shortcut: 'Del', action: () => actions.onDelete() },
+          { label: t('menu.selectAll'), shortcut: 'Ctrl+A', action: () => actions.onSelectAll() }
         ]
       },
       {
-        title: 'View',
+        title: t('menu.view'),
         items: [
-          { label: 'Zoom In', shortcut: '+', action: () => engine.zoomIn() },
-          { label: 'Zoom Out', shortcut: '-', action: () => engine.zoomOut() },
-          { label: 'Normal (100%)', shortcut: '1', action: () => engine.resetZoom() },
+          { label: t('menu.zoomIn'), shortcut: '+', action: () => engine.zoomIn() },
+          { label: t('menu.zoomOut'), shortcut: '-', action: () => engine.zoomOut() },
+          { label: t('menu.zoomNormal'), shortcut: '1', action: () => engine.resetZoom() },
           { separator: true },
-          { label: 'Toggle Grid', shortcut: 'G', action: () => engine.toggleGrid() },
-          { label: 'Toggle Background', action: () => engine.toggleBackground() },
+          { label: t('menu.toggleGrid'), shortcut: 'G', action: () => engine.toggleGrid() },
+          { label: t('menu.toggleBg'), action: () => engine.toggleBackground() },
           { separator: true },
-          { label: 'Grid Settings...', action: () => actions.onGridSettings() }
+          { label: t('menu.gridSettings'), action: () => actions.onGridSettings() }
         ]
       },
       {
-        title: 'Transform',
+        title: t('menu.transform'),
         items: [
           {
-            label: 'Mirror (Horizontal)',
+            label: t('menu.mirrorH'),
             action: () => {
               historyManager.pushState(engine.getImageData());
               const flipped = flipHorizontal(engine.getImageData());
@@ -101,7 +109,7 @@ export class MenuBar {
             }
           },
           {
-            label: 'Flip (Vertical)',
+            label: t('menu.flipV'),
             action: () => {
               historyManager.pushState(engine.getImageData());
               const flipped = flipVertical(engine.getImageData());
@@ -109,7 +117,7 @@ export class MenuBar {
             }
           },
           {
-            label: 'Rotate 90° CW',
+            label: t('menu.rotateCw'),
             action: () => {
               historyManager.pushState(engine.getImageData());
               const rotated = rotate90CW(engine.getImageData());
@@ -118,7 +126,7 @@ export class MenuBar {
             }
           },
           {
-            label: 'Rotate 90° CCW',
+            label: t('menu.rotateCcw'),
             action: () => {
               historyManager.pushState(engine.getImageData());
               const rotated = rotate90CCW(engine.getImageData());
@@ -128,7 +136,7 @@ export class MenuBar {
           },
           { separator: true },
           {
-            label: 'Invert Colors',
+            label: t('menu.invertColors'),
             action: () => {
               historyManager.pushState(engine.getImageData());
               const inverted = invertColors(engine.getImageData());
@@ -138,12 +146,25 @@ export class MenuBar {
         ]
       },
       {
-        title: 'Image',
+        title: t('menu.image'),
         items: [
-          { label: 'Canvas Size...', action: () => actions.onCanvasSize() },
-          { label: 'Stretch / Scale...', action: () => actions.onStretch() },
+          { label: t('menu.canvasSize'), action: () => actions.onCanvasSize() },
+          { label: t('menu.stretch'), action: () => actions.onStretch() },
           { separator: true },
-          { label: 'Clear Image', action: () => engine.clearCanvas() }
+          { label: t('menu.clear'), action: () => engine.clearCanvas() }
+        ]
+      },
+      {
+        title: t('menu.language'),
+        items: [
+          {
+            label: `Español ${isEs ? '✓' : ''}`,
+            action: () => i18n.setLanguage('es')
+          },
+          {
+            label: `English ${!isEs ? '✓' : ''}`,
+            action: () => i18n.setLanguage('en')
+          }
         ]
       }
     ];

@@ -11,6 +11,7 @@ import { ToolBar } from './ui/ToolBar.ts';
 import { ToolPalette } from './ui/ToolPalette.ts';
 import { ColorPanel } from './ui/ColorPanel.ts';
 import { StatusBar } from './ui/StatusBar.ts';
+import { i18n, t } from './i18n/i18n.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
   const viewportContainer = document.getElementById('viewport-container')!;
@@ -23,9 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentFilename = 'sprite0.png';
 
   const updateTitle = (name: string) => {
-    document.title = `Image Editor: ${name}`;
+    document.title = t('app.title', { name });
   };
   updateTitle('sprite0');
+
+  i18n.subscribe(() => {
+    updateTitle(currentFilename.replace(/\.[^/.]+$/, ''));
+  });
 
   // 1. Inicialización de los gestores del núcleo
   const historyManager = new HistoryManager();

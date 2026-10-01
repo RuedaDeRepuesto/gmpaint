@@ -1,6 +1,7 @@
 import { CanvasEngine } from '../core/CanvasEngine.ts';
 import { ColorManager } from '../core/ColorManager.ts';
 import { SelectionManager } from '../core/SelectionManager.ts';
+import { i18n, t } from '../i18n/i18n.ts';
 
 export class StatusBar {
   private element: HTMLElement;
@@ -10,19 +11,23 @@ export class StatusBar {
   private modeCell: HTMLElement;
   private selCell: HTMLElement;
 
+  private colorManager: ColorManager;
+
   constructor(
     container: HTMLElement,
     engine: CanvasEngine,
     colorManager: ColorManager,
     selectionManager: SelectionManager
   ) {
+    this.colorManager = colorManager;
+
     this.element = document.createElement('div');
     this.element.className = 'status-bar';
 
     this.coordCell = this.createCell('[0, 0]');
     this.sizeCell = this.createCell(`${engine.getWidth()}x${engine.getHeight()}`);
     this.zoomCell = this.createCell(`${engine.getZoom() * 100}%`);
-    this.modeCell = this.createCell(`Mode: ${colorManager.getMode().toUpperCase()}`);
+    this.modeCell = this.createCell(`${t('statusBar.mode')}: ${colorManager.getMode().toUpperCase()}`);
     this.selCell = this.createCell('', true);
 
     container.appendChild(this.element);
@@ -34,16 +39,28 @@ export class StatusBar {
     });
 
     colorManager.subscribe((state) => {
-      this.modeCell.textContent = `Mode: ${state.mode.toUpperCase()}`;
+      this.modeCell.textContent = `${t('statusBar.mode')}: ${state.mode.toUpperCase()}`;
     });
 
-    selectionManager.setOnChange(() => {
+    const updateSelectionText = () => {
       const bounds = selectionManager.getBounds();
       if (bounds) {
-        this.selCell.textContent = `Selection: ${bounds.width}x${bounds.height} at (${bounds.x}, ${bounds.y})`;
+        this.selCell.textContent = t('statusBar.selection', {
+          width: bounds.width,
+          height: bounds.height,
+          x: bounds.x,
+          y: bounds.y
+        });
       } else {
         this.selCell.textContent = '';
       }
+    };
+
+    selectionManager.setOnChange(updateSelectionText);
+
+    i18n.subscribe(() => {
+      this.modeCell.textContent = `${t('statusBar.mode')}: ${this.colorManager.getMode().toUpperCase()}`;
+      updateSelectionText();
     });
   }
 

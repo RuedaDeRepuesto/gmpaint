@@ -1,0 +1,149 @@
+{
+  "app": {
+    "title": "Image Editor: {name}"
+  },
+  "menu": {
+    "file": "File",
+    "new": "New...",
+    "open": "Open...",
+    "save": "Save",
+    "insert": "Insert from file...",
+    "exit": "Exit",
+    "edit": "Edit",
+    "undo": "Undo",
+    "redo": "Redo",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "delete": "Delete",
+    "selectAll": "Select All",
+    "view": "View",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "zoomNormal": "Normal (100%)",
+    "toggleGrid": "Toggle Grid",
+    "toggleBg": "Toggle Background",
+    "gridSettings": "Grid Settings...",
+    "language": "Language / Idioma",
+    "langEs": "Español",
+    "langEn": "English (Current)",
+    "transform": "Transform",
+    "mirrorH": "Mirror (Horizontal)",
+    "flipV": "Flip (Vertical)",
+    "rotateCw": "Rotate 90° CW",
+    "rotateCcw": "Rotate 90° CCW",
+    "invertColors": "Invert Colors",
+    "image": "Image",
+    "canvasSize": "Canvas Size...",
+    "stretch": "Stretch / Scale...",
+    "clear": "Clear Image"
+  },
+  "toolbar": {
+    "confirm": "Confirm / Save (Ctrl+S)",
+    "new": "New Image (Ctrl+N)",
+    "open": "Open Image (Ctrl+O)",
+    "insert": "Insert Image from File...",
+    "save": "Save PNG (Ctrl+S)",
+    "undo": "Undo (Ctrl+Z)",
+    "redo": "Redo (Ctrl+Y)",
+    "cut": "Cut (Ctrl+X)",
+    "copy": "Copy (Ctrl+C)",
+    "paste": "Paste (Ctrl+V)",
+    "zoomOut": "Zoom Out (-)",
+    "zoomNormal": "Zoom 100% (1)",
+    "zoomIn": "Zoom In (+)",
+    "grid": "Toggle Pixel Grid",
+    "bg": "Toggle Checkerboard / Solid Background",
+    "gridSettings": "Configure Transparency Grid"
+  },
+  "tools": {
+    "pencil": "Pencil",
+    "line": "Line",
+    "eraser": "Eraser",
+    "picker": "Color Picker (Left / Right click)",
+    "fill": "Fill (Bucket)",
+    "rect": "Rectangle (Outline)",
+    "circle": "Ellipse (Outline)",
+    "rectFill": "Rectangle (Filled)",
+    "circleFill": "Ellipse (Filled)",
+    "select": "Select (Rectangular marquee)",
+    "text": "Insert Text",
+    "size": "Size",
+    "brushSize": "Brush Size: {size}px"
+  },
+  "colorPanel": {
+    "colors": "Colors",
+    "left": "Left:",
+    "right": "Right:",
+    "leftTitle": "Left-click primary color",
+    "rightTitle": "Right-click secondary color",
+    "presetTitle": "{color} (Left click: Left / Right click: Right)",
+    "opacity": "Opacity",
+    "colorMode": "Color Mode",
+    "blend": "Blend",
+    "replace": "Replace"
+  },
+  "statusBar": {
+    "mode": "Mode",
+    "selection": "Selection: {width}x{height} at ({x}, {y})"
+  },
+  "dialogs": {
+    "common": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "pixels": "pixels",
+      "px": "px"
+    },
+    "new": {
+      "title": "New Image",
+      "width": "Width:",
+      "height": "Height:",
+      "background": "Background:",
+      "transparent": "Transparent",
+      "white": "White"
+    },
+    "canvasSize": {
+      "title": "Canvas Size",
+      "currentSize": "Current Size",
+      "newSize": "New Size",
+      "width": "Width:",
+      "height": "Height:",
+      "anchor": "Anchor Position"
+    },
+    "stretch": {
+      "title": "Stretch / Scale Image",
+      "newDimensions": "New Dimensions",
+      "width": "Width:",
+      "height": "Height:",
+      "keepAspect": "Keep aspect ratio",
+      "quality": "Quality / Resampling",
+      "nearest": "Nearest Neighbor (Pixel Art crisp)",
+      "bilinear": "Bilinear (Smooth)"
+    },
+    "text": {
+      "title": "Insert Text",
+      "text": "Text:",
+      "font": "Font:",
+      "size": "Size:",
+      "bold": "Bold",
+      "italic": "Italic"
+    },
+    "gridSettings": {
+      "title": "Transparency Grid Settings",
+      "gridColors": "Grid Colors",
+      "color1": "Color 1:",
+      "color2": "Color 2:",
+      "squareSize": "Square Size (Screen Pixels)",
+      "tiny": "4 px (Tiny)",
+      "standard": "8 px (Standard)",
+      "medium": "12 px (Medium)",
+      "large": "16 px (Large)",
+      "quickPresets": "Quick Presets",
+      "classicLight": "Classic Light",
+      "darkCharcoal": "Dark Charcoal",
+      "blueprint": "Blueprint",
+      "contrast": "High Contrast",
+      "preview": "Live Preview"
+    }
+  }
+}

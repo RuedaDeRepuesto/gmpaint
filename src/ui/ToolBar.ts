@@ -2,6 +2,7 @@ import { CanvasEngine } from '../core/CanvasEngine.ts';
 import { HistoryManager } from '../core/HistoryManager.ts';
 import { ICONS } from './Icons.ts';
 import { AppActions } from './MenuBar.ts';
+import { i18n, t } from '../i18n/i18n.ts';
 
 export class ToolBar {
   private element: HTMLElement;
@@ -20,6 +21,11 @@ export class ToolBar {
     container.appendChild(this.element);
 
     this.createButtons(engine, historyManager, actions);
+
+    i18n.subscribe(() => {
+      this.element.innerHTML = '';
+      this.createButtons(engine, historyManager, actions);
+    });
   }
 
   private createButtons(
@@ -28,66 +34,66 @@ export class ToolBar {
     actions: AppActions
   ): void {
     // 1. Confirmar / Guardar (Checkmark verde de GM8)
-    this.createBtn(ICONS.check, 'Confirm / Save (Ctrl+S)', () => actions.onSave(), 'confirm-btn');
+    this.createBtn(ICONS.check, t('toolbar.confirm', { key: 'Ctrl+S' }), () => actions.onSave(), 'confirm-btn');
 
     // 2. Nuevo
-    this.createBtn(ICONS.new, 'New Image (Ctrl+N)', () => actions.onNew());
+    this.createBtn(ICONS.new, t('toolbar.new', { key: 'Ctrl+N' }), () => actions.onNew());
 
     // 3. Abrir
-    this.createBtn(ICONS.open, 'Open Image (Ctrl+O)', () => actions.onOpen());
+    this.createBtn(ICONS.open, t('toolbar.open', { key: 'Ctrl+O' }), () => actions.onOpen());
 
     // 4. Insertar desde archivo
-    this.createBtn(ICONS.insert, 'Insert Image from File...', () => actions.onInsertFromFile());
+    this.createBtn(ICONS.insert, t('toolbar.insert'), () => actions.onInsertFromFile());
 
     // 5. Guardar
-    this.createBtn(ICONS.save, 'Save PNG (Ctrl+S)', () => actions.onSave());
+    this.createBtn(ICONS.save, t('toolbar.save', { key: 'Ctrl+S' }), () => actions.onSave());
 
     this.createSeparator();
 
     // 6. Undo
-    this.undoBtn = this.createBtn(ICONS.undo, 'Undo (Ctrl+Z)', () => actions.onUndo());
+    this.undoBtn = this.createBtn(ICONS.undo, t('toolbar.undo', { key: 'Ctrl+Z' }), () => actions.onUndo());
 
     // 7. Redo
-    this.redoBtn = this.createBtn(ICONS.redo, 'Redo (Ctrl+Y)', () => actions.onRedo());
+    this.redoBtn = this.createBtn(ICONS.redo, t('toolbar.redo', { key: 'Ctrl+Y' }), () => actions.onRedo());
 
     this.createSeparator();
 
     // 8. Cortar
-    this.createBtn(ICONS.cut, 'Cut (Ctrl+X)', () => actions.onCut());
+    this.createBtn(ICONS.cut, t('toolbar.cut', { key: 'Ctrl+X' }), () => actions.onCut());
 
     // 9. Copiar
-    this.createBtn(ICONS.copy, 'Copy (Ctrl+C)', () => actions.onCopy());
+    this.createBtn(ICONS.copy, t('toolbar.copy', { key: 'Ctrl+C' }), () => actions.onCopy());
 
     // 10. Pegar
-    this.createBtn(ICONS.paste, 'Paste (Ctrl+V)', () => actions.onPaste());
+    this.createBtn(ICONS.paste, t('toolbar.paste', { key: 'Ctrl+V' }), () => actions.onPaste());
 
     this.createSeparator();
 
     // 11. Zoom Menos
-    this.createBtn(ICONS.zoomOut, 'Zoom Out (-)', () => engine.zoomOut());
+    this.createBtn(ICONS.zoomOut, t('toolbar.zoomOut'), () => engine.zoomOut());
 
     // 12. Zoom 100%
-    this.createBtn(ICONS.zoomEqual, 'Zoom 100% (1)', () => engine.resetZoom());
+    this.createBtn(ICONS.zoomEqual, t('toolbar.zoomNormal'), () => engine.resetZoom());
 
     // 13. Zoom Mas
-    this.createBtn(ICONS.zoomIn, 'Zoom In (+)', () => engine.zoomIn());
+    this.createBtn(ICONS.zoomIn, t('toolbar.zoomIn'), () => engine.zoomIn());
 
     this.createSeparator();
 
     // 14. Toggle Grid
-    this.gridBtn = this.createBtn(ICONS.grid, 'Toggle Pixel Grid', () => {
+    this.gridBtn = this.createBtn(ICONS.grid, t('toolbar.grid'), () => {
       const active = engine.toggleGrid();
       this.gridBtn.classList.toggle('active', active);
     });
     this.gridBtn.classList.toggle('active', engine.isGridVisible());
 
     // 15. Toggle Background
-    this.createBtn(ICONS.background, 'Toggle Checkerboard / Solid Background', () => {
+    this.createBtn(ICONS.background, t('toolbar.bg'), () => {
       engine.toggleBackground();
     });
 
     // 16. Configurar cuadrícula de transparencia
-    this.createBtn(ICONS.gridSettings, 'Configure Transparency Grid', () => {
+    this.createBtn(ICONS.gridSettings, t('toolbar.gridSettings'), () => {
       actions.onGridSettings();
     });
 

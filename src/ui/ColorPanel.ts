@@ -1,5 +1,6 @@
 import { ColorManager } from '../core/ColorManager.ts';
 import { ColorMode, rgbToHex } from '../core/PixelOps.ts';
+import { i18n, t } from '../i18n/i18n.ts';
 
 export class ColorPanel {
   private element: HTMLElement;
@@ -20,21 +21,37 @@ export class ColorPanel {
     this.element.className = 'right-palette';
     container.appendChild(this.element);
 
-    this.renderColorsBox();
-    this.renderPresetGrid();
-    this.renderSpectrumPicker();
-    this.renderOpacityBox();
-    this.renderColorModeBox();
+    this.renderAll();
+
+    i18n.subscribe(() => {
+      this.renderAll();
+    });
 
     this.colorManager.subscribe((state) => {
       this.updateUI(state.leftColor, state.rightColor, state.opacity, state.mode);
     });
   }
 
+  private renderAll(): void {
+    this.element.innerHTML = '';
+    this.renderColorsBox();
+    this.renderPresetGrid();
+    this.renderSpectrumPicker();
+    this.renderOpacityBox();
+    this.renderColorModeBox();
+
+    this.updateUI(
+      this.colorManager.getLeftColor(),
+      this.colorManager.getRightColor(),
+      this.colorManager.getOpacity(),
+      this.colorManager.getMode()
+    );
+  }
+
   private renderColorsBox(): void {
     const fieldset = document.createElement('fieldset');
     const legend = document.createElement('legend');
-    legend.textContent = 'Colors';
+    legend.textContent = t('colorPanel.colors');
     fieldset.appendChild(legend);
 
     const swatchesBox = document.createElement('div');
@@ -43,22 +60,22 @@ export class ColorPanel {
     // Left Swatch
     const leftWrapper = document.createElement('div');
     leftWrapper.className = 'color-swatch-wrapper';
-    leftWrapper.innerHTML = '<span>Left:</span>';
+    leftWrapper.innerHTML = `<span>${t('colorPanel.left')}</span>`;
     this.leftSwatch = document.createElement('div');
     this.leftSwatch.className = 'color-swatch';
-    this.leftSwatch.title = 'Left-click color';
+    this.leftSwatch.title = t('colorPanel.leftTitle');
     leftWrapper.appendChild(this.leftSwatch);
 
     // Right Swatch
     const rightWrapper = document.createElement('div');
     rightWrapper.className = 'color-swatch-wrapper';
-    rightWrapper.innerHTML = '<span>Right:</span>';
+    rightWrapper.innerHTML = `<span>${t('colorPanel.right')}</span>`;
     this.rightSwatch = document.createElement('div');
     this.rightSwatch.className = 'color-swatch';
-    this.rightSwatch.title = 'Right-click color';
+    this.rightSwatch.title = t('colorPanel.rightTitle');
     rightWrapper.appendChild(this.rightSwatch);
 
-    // Native color inputs invisibles para abrir selector de sistema si se hace doble click
+    // Native color inputs invisibles
     const leftNative = document.createElement('input');
     leftNative.type = 'color';
     leftNative.style.display = 'none';
@@ -97,7 +114,7 @@ export class ColorPanel {
       const chip = document.createElement('div');
       chip.className = 'preset-chip';
       chip.style.backgroundColor = color;
-      chip.title = `${color} (Left click: Izq / Right click: Der)`;
+      chip.title = t('colorPanel.presetTitle', { color });
 
       chip.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -156,7 +173,6 @@ export class ColorPanel {
     const w = this.spectrumCanvas.width;
     const h = this.spectrumCanvas.height;
 
-    // Gradiente horizontal con todo el arcoíris
     const hGrad = this.spectrumCtx.createLinearGradient(0, 0, w, 0);
     hGrad.addColorStop(0, '#ff0000');
     hGrad.addColorStop(0.17, '#ffff00');
@@ -169,7 +185,6 @@ export class ColorPanel {
     this.spectrumCtx.fillStyle = hGrad;
     this.spectrumCtx.fillRect(0, 0, w, h);
 
-    // Gradiente vertical de blanco a transparente y a negro
     const vGrad = this.spectrumCtx.createLinearGradient(0, 0, 0, h);
     vGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
     vGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
@@ -184,7 +199,7 @@ export class ColorPanel {
     const fieldset = document.createElement('fieldset');
     fieldset.className = 'opacity-container';
     const legend = document.createElement('legend');
-    legend.textContent = 'Opacity';
+    legend.textContent = t('colorPanel.opacity');
     fieldset.appendChild(legend);
 
     const inputsRow = document.createElement('div');
@@ -226,7 +241,7 @@ export class ColorPanel {
   private renderColorModeBox(): void {
     const fieldset = document.createElement('fieldset');
     const legend = document.createElement('legend');
-    legend.textContent = 'Color Mode';
+    legend.textContent = t('colorPanel.colorMode');
     fieldset.appendChild(legend);
 
     const options = document.createElement('div');
@@ -240,7 +255,7 @@ export class ColorPanel {
     this.blendRadio.value = 'blend';
     this.blendRadio.checked = this.colorManager.getMode() === 'blend';
     blendLabel.appendChild(this.blendRadio);
-    blendLabel.appendChild(document.createTextNode('Blend'));
+    blendLabel.appendChild(document.createTextNode(t('colorPanel.blend')));
 
     const replaceLabel = document.createElement('label');
     replaceLabel.className = 'color-mode-label';
@@ -250,7 +265,7 @@ export class ColorPanel {
     this.replaceRadio.value = 'replace';
     this.replaceRadio.checked = this.colorManager.getMode() === 'replace';
     replaceLabel.appendChild(this.replaceRadio);
-    replaceLabel.appendChild(document.createTextNode('Replace'));
+    replaceLabel.appendChild(document.createTextNode(t('colorPanel.replace')));
 
     const handleChange = (mode: ColorMode) => {
       this.colorManager.setMode(mode);
@@ -266,15 +281,17 @@ export class ColorPanel {
   }
 
   private updateUI(leftColor: string, rightColor: string, opacity: number, mode: ColorMode): void {
-    this.leftSwatch.style.backgroundColor = leftColor;
-    this.rightSwatch.style.backgroundColor = rightColor;
+    if (this.leftSwatch) this.leftSwatch.style.backgroundColor = leftColor;
+    if (this.rightSwatch) this.rightSwatch.style.backgroundColor = rightColor;
 
-    if (this.opacityInput.value !== opacity.toString()) {
+    if (this.opacityInput && this.opacityInput.value !== opacity.toString()) {
       this.opacityInput.value = opacity.toString();
     }
-    this.opacityBarFill.style.width = `${(opacity / 255) * 100}%`;
+    if (this.opacityBarFill) {
+      this.opacityBarFill.style.width = `${(opacity / 255) * 100}%`;
+    }
 
-    this.blendRadio.checked = mode === 'blend';
-    this.replaceRadio.checked = mode === 'replace';
+    if (this.blendRadio) this.blendRadio.checked = mode === 'blend';
+    if (this.replaceRadio) this.replaceRadio.checked = mode === 'replace';
   }
 }

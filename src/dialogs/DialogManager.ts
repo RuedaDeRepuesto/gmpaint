@@ -1,6 +1,7 @@
 import { AnchorPosition } from '../core/PixelOps.ts';
 import { imageBlobToImageData, imageDataToBlob } from '../core/ClipboardManager.ts';
 import { CheckerSettings } from '../core/CanvasEngine.ts';
+import { t } from '../i18n/i18n.ts';
 
 export interface NewImageConfig {
   width: number;
@@ -62,11 +63,11 @@ export class DialogManager {
 
       const okBtn = document.createElement('button');
       okBtn.className = 'modal-btn';
-      okBtn.textContent = 'OK';
+      okBtn.textContent = t('dialogs.common.ok');
 
       const cancelBtn = document.createElement('button');
       cancelBtn.className = 'modal-btn';
-      cancelBtn.textContent = 'Cancel';
+      cancelBtn.textContent = t('dialogs.common.cancel');
 
       btnRow.appendChild(okBtn);
       btnRow.appendChild(cancelBtn);
@@ -99,23 +100,23 @@ export class DialogManager {
    * Diálogo para crear una nueva imagen.
    */
   public static async showNewDialog(defaultW: number = 32, defaultH: number = 32): Promise<NewImageConfig | null> {
-    return this.showModal<NewImageConfig>('New Image', (container) => {
+    return this.showModal<NewImageConfig>(t('dialogs.new.title'), (container) => {
       container.innerHTML = `
         <div class="modal-row">
-          <label class="modal-label">Width:</label>
+          <label class="modal-label">${t('dialogs.new.width')}</label>
           <input type="number" id="new-w" value="${defaultW}" min="1" max="4096" style="width: 80px;" />
-          <span>pixels</span>
+          <span>${t('dialogs.common.pixels')}</span>
         </div>
         <div class="modal-row">
-          <label class="modal-label">Height:</label>
+          <label class="modal-label">${t('dialogs.new.height')}</label>
           <input type="number" id="new-h" value="${defaultH}" min="1" max="4096" style="width: 80px;" />
-          <span>pixels</span>
+          <span>${t('dialogs.common.pixels')}</span>
         </div>
         <div class="modal-row">
-          <label class="modal-label">Background:</label>
+          <label class="modal-label">${t('dialogs.new.background')}</label>
           <select id="new-bg" style="width: 120px;">
-            <option value="transparent">Transparent</option>
-            <option value="white">White</option>
+            <option value="transparent">${t('dialogs.new.transparent')}</option>
+            <option value="white">${t('dialogs.new.white')}</option>
           </select>
         </div>
       `;
@@ -134,29 +135,29 @@ export class DialogManager {
    * Diálogo de tamaño de lienzo con selector de anclaje de 9 posiciones.
    */
   public static async showCanvasSizeDialog(currentW: number, currentH: number): Promise<CanvasSizeConfig | null> {
-    return this.showModal<CanvasSizeConfig>('Canvas Size', (container) => {
+    return this.showModal<CanvasSizeConfig>(t('dialogs.canvasSize.title'), (container) => {
       let selectedAnchor: AnchorPosition = 'center';
 
       container.innerHTML = `
         <fieldset>
-          <legend>Current Size</legend>
-          <div style="padding: 2px;">${currentW} x ${currentH} pixels</div>
+          <legend>${t('dialogs.canvasSize.currentSize')}</legend>
+          <div style="padding: 2px;">${currentW} x ${currentH} ${t('dialogs.common.pixels')}</div>
         </fieldset>
         <fieldset>
-          <legend>New Size</legend>
+          <legend>${t('dialogs.canvasSize.newSize')}</legend>
           <div class="modal-row" style="margin-bottom: 4px;">
-            <label class="modal-label">Width:</label>
+            <label class="modal-label">${t('dialogs.canvasSize.width')}</label>
             <input type="number" id="cs-w" value="${currentW}" min="1" max="4096" style="width: 80px;" />
-            <span>pixels</span>
+            <span>${t('dialogs.common.pixels')}</span>
           </div>
           <div class="modal-row">
-            <label class="modal-label">Height:</label>
+            <label class="modal-label">${t('dialogs.canvasSize.height')}</label>
             <input type="number" id="cs-h" value="${currentH}" min="1" max="4096" style="width: 80px;" />
-            <span>pixels</span>
+            <span>${t('dialogs.common.pixels')}</span>
           </div>
         </fieldset>
         <fieldset>
-          <legend>Anchor Position</legend>
+          <legend>${t('dialogs.canvasSize.anchor')}</legend>
           <div class="anchor-grid">
             <button type="button" class="anchor-btn" data-anchor="top-left">↖</button>
             <button type="button" class="anchor-btn" data-anchor="top-center">↑</button>
@@ -193,33 +194,33 @@ export class DialogManager {
    * Diálogo para escalar / estirar la imagen existente.
    */
   public static async showStretchDialog(currentW: number, currentH: number): Promise<StretchConfig | null> {
-    return this.showModal<StretchConfig>('Stretch / Scale Image', (container) => {
+    return this.showModal<StretchConfig>(t('dialogs.stretch.title'), (container) => {
       const aspectRatio = currentW / currentH;
 
       container.innerHTML = `
         <fieldset>
-          <legend>New Dimensions</legend>
+          <legend>${t('dialogs.stretch.newDimensions')}</legend>
           <div class="modal-row" style="margin-bottom: 4px;">
-            <label class="modal-label">Width:</label>
+            <label class="modal-label">${t('dialogs.stretch.width')}</label>
             <input type="number" id="st-w" value="${currentW}" min="1" max="4096" style="width: 80px;" />
-            <span>px</span>
+            <span>${t('dialogs.common.px')}</span>
           </div>
           <div class="modal-row" style="margin-bottom: 6px;">
-            <label class="modal-label">Height:</label>
+            <label class="modal-label">${t('dialogs.stretch.height')}</label>
             <input type="number" id="st-h" value="${currentH}" min="1" max="4096" style="width: 80px;" />
-            <span>px</span>
+            <span>${t('dialogs.common.px')}</span>
           </div>
           <div class="modal-row">
             <input type="checkbox" id="st-ratio" checked />
-            <label for="st-ratio">Keep aspect ratio</label>
+            <label for="st-ratio">${t('dialogs.stretch.keepAspect')}</label>
           </div>
         </fieldset>
         <fieldset>
-          <legend>Quality / Resampling</legend>
+          <legend>${t('dialogs.stretch.quality')}</legend>
           <div class="modal-row">
             <select id="st-mode" style="width: 100%;">
-              <option value="nearest">Nearest Neighbor (Pixel Art crisp)</option>
-              <option value="bilinear">Bilinear (Smooth)</option>
+              <option value="nearest">${t('dialogs.stretch.nearest')}</option>
+              <option value="bilinear">${t('dialogs.stretch.bilinear')}</option>
             </select>
           </div>
         </fieldset>
@@ -261,14 +262,14 @@ export class DialogManager {
    * Diálogo para insertar texto tipográfico en el lienzo.
    */
   public static async showTextDialog(): Promise<TextConfig | null> {
-    return this.showModal<TextConfig>('Insert Text', (container) => {
+    return this.showModal<TextConfig>(t('dialogs.text.title'), (container) => {
       container.innerHTML = `
         <div class="modal-row">
-          <label class="modal-label">Text:</label>
+          <label class="modal-label">${t('dialogs.text.text')}</label>
           <input type="text" id="tx-str" value="GM8" style="flex: 1;" />
         </div>
         <div class="modal-row">
-          <label class="modal-label">Font:</label>
+          <label class="modal-label">${t('dialogs.text.font')}</label>
           <select id="tx-font" style="flex: 1;">
             <option value="Arial">Arial</option>
             <option value="'Courier New', monospace">Courier New</option>
@@ -278,15 +279,15 @@ export class DialogManager {
           </select>
         </div>
         <div class="modal-row">
-          <label class="modal-label">Size:</label>
+          <label class="modal-label">${t('dialogs.text.size')}</label>
           <input type="number" id="tx-size" value="16" min="6" max="120" style="width: 70px;" />
           <span>pt</span>
         </div>
         <div class="modal-row">
           <input type="checkbox" id="tx-bold" />
-          <label for="tx-bold" style="margin-right: 12px;">Bold</label>
+          <label for="tx-bold" style="margin-right: 12px;">${t('dialogs.text.bold')}</label>
           <input type="checkbox" id="tx-italic" />
-          <label for="tx-italic">Italic</label>
+          <label for="tx-italic">${t('dialogs.text.italic')}</label>
         </div>
       `;
 
@@ -307,48 +308,48 @@ export class DialogManager {
    * Diálogo interactivo para configurar colores, tamaño de celda y presets de la cuadrícula de transparencia.
    */
   public static async showGridConfigDialog(current: CheckerSettings): Promise<CheckerSettings | null> {
-    return this.showModal<CheckerSettings>('Transparency Grid Settings', (container) => {
+    return this.showModal<CheckerSettings>(t('dialogs.gridSettings.title'), (container) => {
       let activeSize = current.size;
       let activeColor1 = current.color1;
       let activeColor2 = current.color2;
 
       container.innerHTML = `
         <fieldset>
-          <legend>Grid Colors</legend>
+          <legend>${t('dialogs.gridSettings.gridColors')}</legend>
           <div class="modal-row" style="margin-bottom: 6px;">
-            <label class="modal-label">Color 1:</label>
+            <label class="modal-label">${t('dialogs.gridSettings.color1')}</label>
             <input type="color" id="gc-c1" value="${activeColor1}" style="width: 36px; height: 22px; padding: 0; cursor: pointer;" />
             <input type="text" id="gc-c1-text" value="${activeColor1}" style="width: 75px;" />
           </div>
           <div class="modal-row">
-            <label class="modal-label">Color 2:</label>
+            <label class="modal-label">${t('dialogs.gridSettings.color2')}</label>
             <input type="color" id="gc-c2" value="${activeColor2}" style="width: 36px; height: 22px; padding: 0; cursor: pointer;" />
             <input type="text" id="gc-c2-text" value="${activeColor2}" style="width: 75px;" />
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Square Size (Screen Pixels)</legend>
+          <legend>${t('dialogs.gridSettings.squareSize')}</legend>
           <div class="modal-row" style="gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
-            <label><input type="radio" name="grid-size" value="4" ${activeSize === 4 ? 'checked' : ''} /> 4 px (Tiny)</label>
-            <label><input type="radio" name="grid-size" value="8" ${activeSize === 8 ? 'checked' : ''} /> 8 px (Standard)</label>
-            <label><input type="radio" name="grid-size" value="12" ${activeSize === 12 ? 'checked' : ''} /> 12 px (Medium)</label>
-            <label><input type="radio" name="grid-size" value="16" ${activeSize === 16 ? 'checked' : ''} /> 16 px (Large)</label>
+            <label><input type="radio" name="grid-size" value="4" ${activeSize === 4 ? 'checked' : ''} /> ${t('dialogs.gridSettings.tiny')}</label>
+            <label><input type="radio" name="grid-size" value="8" ${activeSize === 8 ? 'checked' : ''} /> ${t('dialogs.gridSettings.standard')}</label>
+            <label><input type="radio" name="grid-size" value="12" ${activeSize === 12 ? 'checked' : ''} /> ${t('dialogs.gridSettings.medium')}</label>
+            <label><input type="radio" name="grid-size" value="16" ${activeSize === 16 ? 'checked' : ''} /> ${t('dialogs.gridSettings.large')}</label>
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Quick Presets</legend>
+          <legend>${t('dialogs.gridSettings.quickPresets')}</legend>
           <div class="modal-row" style="gap: 5px; flex-wrap: wrap;">
-            <button type="button" class="modal-btn" id="preset-classic">Classic Light</button>
-            <button type="button" class="modal-btn" id="preset-dark">Dark Charcoal</button>
-            <button type="button" class="modal-btn" id="preset-blue">Blueprint</button>
-            <button type="button" class="modal-btn" id="preset-contrast">Contrast</button>
+            <button type="button" class="modal-btn" id="preset-classic">${t('dialogs.gridSettings.classicLight')}</button>
+            <button type="button" class="modal-btn" id="preset-dark">${t('dialogs.gridSettings.darkCharcoal')}</button>
+            <button type="button" class="modal-btn" id="preset-blue">${t('dialogs.gridSettings.blueprint')}</button>
+            <button type="button" class="modal-btn" id="preset-contrast">${t('dialogs.gridSettings.contrast')}</button>
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Live Preview</legend>
+          <legend>${t('dialogs.gridSettings.preview')}</legend>
           <div style="display: flex; justify-content: center; padding: 4px;">
             <canvas id="gc-preview" width="220" height="60" style="border: 1px solid var(--border-mid-dark); box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);"></canvas>
           </div>

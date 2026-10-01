@@ -1,0 +1,149 @@
+{
+  "app": {
+    "title": "Editor de imágenes: {name}"
+  },
+  "menu": {
+    "file": "Archivo",
+    "new": "Nuevo...",
+    "open": "Abrir...",
+    "save": "Guardar",
+    "insert": "Insertar desde archivo...",
+    "exit": "Salir",
+    "edit": "Edición",
+    "undo": "Deshacer",
+    "redo": "Rehacer",
+    "cut": "Cortar",
+    "copy": "Copiar",
+    "paste": "Pegar",
+    "delete": "Borrar",
+    "selectAll": "Seleccionar todo",
+    "view": "Ver",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "zoomNormal": "Normal (100%)",
+    "toggleGrid": "Alternar cuadrícula",
+    "toggleBg": "Alternar fondo",
+    "gridSettings": "Configurar cuadrícula...",
+    "language": "Idioma / Language",
+    "langEs": "Español (Actual)",
+    "langEn": "English",
+    "transform": "Transformar",
+    "mirrorH": "Reflejo (Horizontal)",
+    "flipV": "Volteo (Vertical)",
+    "rotateCw": "Rotar 90° horario",
+    "rotateCcw": "Rotar 90° antihorario",
+    "invertColors": "Invertir colores",
+    "image": "Imagen",
+    "canvasSize": "Tamaño del lienzo...",
+    "stretch": "Estirar / Escalar...",
+    "clear": "Limpiar imagen"
+  },
+  "toolbar": {
+    "confirm": "Confirmar / Guardar (Ctrl+S)",
+    "new": "Nueva imagen (Ctrl+N)",
+    "open": "Abrir imagen (Ctrl+O)",
+    "insert": "Insertar imagen desde archivo...",
+    "save": "Guardar PNG (Ctrl+S)",
+    "undo": "Deshacer (Ctrl+Z)",
+    "redo": "Rehacer (Ctrl+Y)",
+    "cut": "Cortar (Ctrl+X)",
+    "copy": "Copiar (Ctrl+C)",
+    "paste": "Pegar (Ctrl+V)",
+    "zoomOut": "Alejar (-)",
+    "zoomNormal": "Zoom 100% (1)",
+    "zoomIn": "Acercar (+)",
+    "grid": "Alternar cuadrícula de píxeles",
+    "bg": "Alternar cuadrícula / fondo sólido",
+    "gridSettings": "Configurar cuadrícula de transparencia"
+  },
+  "tools": {
+    "pencil": "Lápiz",
+    "line": "Línea",
+    "eraser": "Borrador",
+    "picker": "Selector de color (Click Izq / Der)",
+    "fill": "Bote de pintura (Relleno)",
+    "rect": "Rectángulo (Contorno)",
+    "circle": "Elipse (Contorno)",
+    "rectFill": "Rectángulo (Relleno)",
+    "circleFill": "Elipse (Rellena)",
+    "select": "Selección rectangular",
+    "text": "Insertar texto",
+    "size": "Tamaño",
+    "brushSize": "Tamaño del pincel: {size}px"
+  },
+  "colorPanel": {
+    "colors": "Colores",
+    "left": "Izq:",
+    "right": "Der:",
+    "leftTitle": "Color primario (Click izquierdo)",
+    "rightTitle": "Color secundario (Click derecho)",
+    "presetTitle": "{color} (Click izq: Izq / Click der: Der)",
+    "opacity": "Opacidad",
+    "colorMode": "Modo de color",
+    "blend": "Mezclar",
+    "replace": "Reemplazar"
+  },
+  "statusBar": {
+    "mode": "Modo",
+    "selection": "Selección: {width}x{height} en ({x}, {y})"
+  },
+  "dialogs": {
+    "common": {
+      "ok": "Aceptar",
+      "cancel": "Cancelar",
+      "pixels": "píxeles",
+      "px": "px"
+    },
+    "new": {
+      "title": "Nueva imagen",
+      "width": "Ancho:",
+      "height": "Alto:",
+      "background": "Fondo:",
+      "transparent": "Transparente",
+      "white": "Blanco"
+    },
+    "canvasSize": {
+      "title": "Tamaño del lienzo",
+      "currentSize": "Tamaño actual",
+      "newSize": "Nuevo tamaño",
+      "width": "Ancho:",
+      "height": "Alto:",
+      "anchor": "Posición de anclaje"
+    },
+    "stretch": {
+      "title": "Estirar / Escalar imagen",
+      "newDimensions": "Nuevas dimensiones",
+      "width": "Ancho:",
+      "height": "Alto:",
+      "keepAspect": "Mantener proporción de aspecto",
+      "quality": "Calidad / Remuestreo",
+      "nearest": "Vecino más próximo (Pixel-art nítido)",
+      "bilinear": "Bilineal (Suave)"
+    },
+    "text": {
+      "title": "Insertar texto",
+      "text": "Texto:",
+      "font": "Tipografía:",
+      "size": "Tamaño:",
+      "bold": "Negrita",
+      "italic": "Cursiva"
+    },
+    "gridSettings": {
+      "title": "Configuración de cuadrícula de transparencia",
+      "gridColors": "Colores de la cuadrícula",
+      "color1": "Color 1:",
+      "color2": "Color 2:",
+      "squareSize": "Tamaño de celda (Píxeles de pantalla)",
+      "tiny": "4 px (Diminuto)",
+      "standard": "8 px (Estándar GM8)",
+      "medium": "12 px (Mediano)",
+      "large": "16 px (Grande)",
+      "quickPresets": "Presets rápidos",
+      "classicLight": "Clásico claro",
+      "darkCharcoal": "Oscuro carbón",
+      "blueprint": "Plano azul",
+      "contrast": "Alto contraste",
+      "preview": "Vista previa en vivo"
+    }
+  }
+}
