@@ -19,9 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const toolpaletteContainer = document.getElementById('toolpalette-container')!;
   const colorpanelContainer = document.getElementById('colorpanel-container')!;
   const statusbarContainer = document.getElementById('statusbar-container')!;
-  const windowTitle = document.getElementById('window-title')!;
 
   let currentFilename = 'sprite0.png';
+
+  const updateTitle = (name: string) => {
+    document.title = `Image Editor: ${name}`;
+  };
+  updateTitle('sprite0');
 
   // 1. Inicialización de los gestores del núcleo
   const historyManager = new HistoryManager();
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       currentFilename = 'sprite0.png';
-      windowTitle.textContent = `Image Editor: sprite0`;
+      updateTitle('sprite0');
       engine.setImageData(newImg, true);
       engine.centerCanvas();
     },
@@ -78,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       selectionManager.commit(engine.getImageData());
       currentFilename = result.name;
-      windowTitle.textContent = `Image Editor: ${result.name.replace(/\.[^/.]+$/, '')}`;
+      updateTitle(result.name.replace(/\.[^/.]+$/, ''));
       engine.setImageData(result.imageData, true);
       engine.centerCanvas();
     },
@@ -202,14 +206,4 @@ document.addEventListener('DOMContentLoaded', () => {
       engine.render();
     }
   });
-
-  // Botón de cerrar de la barra de título
-  const closeDot = document.querySelector('.mac-dot.close');
-  if (closeDot) {
-    closeDot.addEventListener('click', () => {
-      if (confirm('¿Deseas cerrar el editor? Asegúrate de haber guardado tus cambios.')) {
-        window.close();
-      }
-    });
-  }
 });

@@ -44,6 +44,7 @@ export class CanvasEngine {
   private previewPoints: { x: number; y: number; color: string }[] | null = null;
   private marchOffset: number = 0;
   private animationFrameId: number | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   private listeners: Set<ViewportListener> = new Set();
 
@@ -429,9 +430,10 @@ export class CanvasEngine {
       }
     });
 
-    window.addEventListener('resize', () => {
+    this.resizeObserver = new ResizeObserver(() => {
       this.render();
     });
+    this.resizeObserver.observe(this.container);
 
     this.selectionManager.setOnChange(() => {
       this.render();
@@ -454,6 +456,9 @@ export class CanvasEngine {
   }
 
   public destroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
     }

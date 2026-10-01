@@ -3,55 +3,13 @@
    ========================================================= */
 
 .app-window {
-  width: 95vw;
-  max-width: 1100px;
-  height: 94vh;
-  max-height: 850px;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--ui-bg);
-  border: 2px solid var(--border-light);
-  border-right-color: var(--border-dark);
-  border-bottom-color: var(--border-dark);
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-
-/* Barra de título */
-.window-titlebar {
-  height: 26px;
-  background: linear-gradient(90deg, #dfdfdf 0%, #ece9d8 100%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
-  font-weight: bold;
-  color: #333333;
-  border-bottom: 1px solid var(--border-mid-dark);
-}
-
-.titlebar-text {
-  flex: 1;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 0.2px;
-}
-
-.mac-window-controls {
-  display: flex;
-  gap: 6px;
-}
-
-.mac-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.mac-dot.close { background-color: #ff5f56; }
-.mac-dot.min { background-color: #ffbd2e; }
-.mac-dot.max { background-color: #27c93f; }
 
 /* Barra de Menú */
 .menu-bar {
@@ -59,6 +17,7 @@
   background: var(--ui-bg);
   border-bottom: 1px solid var(--border-mid-dark);
   padding: 1px 4px;
+  flex-shrink: 0;
 }
 
 .menu-item {
@@ -134,6 +93,7 @@
   background: var(--ui-bg);
   padding: 3px 6px;
   border-bottom: 1px solid var(--border-mid-dark);
+  flex-shrink: 0;
 }
 
 .tb-btn {
@@ -194,6 +154,22 @@
   flex-direction: column;
   gap: 8px;
   overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.left-palette::-webkit-scrollbar,
+.right-palette::-webkit-scrollbar {
+  width: 5px;
+}
+
+.left-palette::-webkit-scrollbar-track,
+.right-palette::-webkit-scrollbar-track {
+  background: var(--ui-bg);
+}
+
+.left-palette::-webkit-scrollbar-thumb,
+.right-palette::-webkit-scrollbar-thumb {
+  background: var(--border-mid-dark);
 }
 
 .tools-grid {
@@ -299,6 +275,7 @@
   flex-direction: column;
   gap: 6px;
   overflow-y: auto;
+  flex-shrink: 0;
 }
 
 /* Selector dual de colores Izq / Der */
@@ -415,6 +392,7 @@
   padding: 0 4px;
   gap: 6px;
   font-size: var(--font-size-small);
+  flex-shrink: 0;
 }
 
 .status-cell {
