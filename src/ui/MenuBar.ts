@@ -19,6 +19,7 @@ export interface AppActions {
   onSelectAll: () => void;
   onCanvasSize: () => Promise<void>;
   onStretch: () => Promise<void>;
+  onGridSettings: () => Promise<void>;
 }
 
 export class MenuBar {
@@ -83,7 +84,9 @@ export class MenuBar {
           { label: 'Normal (100%)', shortcut: '1', action: () => engine.resetZoom() },
           { separator: true },
           { label: 'Toggle Grid', shortcut: 'G', action: () => engine.toggleGrid() },
-          { label: 'Toggle Background', action: () => engine.toggleBackground() }
+          { label: 'Toggle Background', action: () => engine.toggleBackground() },
+          { separator: true },
+          { label: 'Grid Settings...', action: () => actions.onGridSettings() }
         ]
       },
       {

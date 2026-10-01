@@ -1,5 +1,6 @@
 import { AnchorPosition } from '../core/PixelOps.ts';
 import { imageBlobToImageData, imageDataToBlob } from '../core/ClipboardManager.ts';
+import { CheckerSettings } from '../core/CanvasEngine.ts';
 
 export interface NewImageConfig {
   width: number;
@@ -298,6 +299,149 @@ export class DialogManager {
 
         if (!text.trim() || isNaN(size) || size <= 0) return null;
         return { text, fontFamily: font, fontSize: size, bold, italic };
+      };
+    });
+  }
+
+  /**
+   * Diálogo interactivo para configurar colores, tamaño de celda y presets de la cuadrícula de transparencia.
+   */
+  public static async showGridConfigDialog(current: CheckerSettings): Promise<CheckerSettings | null> {
+    return this.showModal<CheckerSettings>('Transparency Grid Settings', (container) => {
+      let activeSize = current.size;
+      let activeColor1 = current.color1;
+      let activeColor2 = current.color2;
+
+      container.innerHTML = `
+        <fieldset>
+          <legend>Grid Colors</legend>
+          <div class="modal-row" style="margin-bottom: 6px;">
+            <label class="modal-label">Color 1:</label>
+            <input type="color" id="gc-c1" value="${activeColor1}" style="width: 36px; height: 22px; padding: 0; cursor: pointer;" />
+            <input type="text" id="gc-c1-text" value="${activeColor1}" style="width: 75px;" />
+          </div>
+          <div class="modal-row">
+            <label class="modal-label">Color 2:</label>
+            <input type="color" id="gc-c2" value="${activeColor2}" style="width: 36px; height: 22px; padding: 0; cursor: pointer;" />
+            <input type="text" id="gc-c2-text" value="${activeColor2}" style="width: 75px;" />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Square Size (Screen Pixels)</legend>
+          <div class="modal-row" style="gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
+            <label><input type="radio" name="grid-size" value="4" ${activeSize === 4 ? 'checked' : ''} /> 4 px (Tiny)</label>
+            <label><input type="radio" name="grid-size" value="8" ${activeSize === 8 ? 'checked' : ''} /> 8 px (Standard)</label>
+            <label><input type="radio" name="grid-size" value="12" ${activeSize === 12 ? 'checked' : ''} /> 12 px (Medium)</label>
+            <label><input type="radio" name="grid-size" value="16" ${activeSize === 16 ? 'checked' : ''} /> 16 px (Large)</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quick Presets</legend>
+          <div class="modal-row" style="gap: 5px; flex-wrap: wrap;">
+            <button type="button" class="modal-btn" id="preset-classic">Classic Light</button>
+            <button type="button" class="modal-btn" id="preset-dark">Dark Charcoal</button>
+            <button type="button" class="modal-btn" id="preset-blue">Blueprint</button>
+            <button type="button" class="modal-btn" id="preset-contrast">Contrast</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Live Preview</legend>
+          <div style="display: flex; justify-content: center; padding: 4px;">
+            <canvas id="gc-preview" width="220" height="60" style="border: 1px solid var(--border-mid-dark); box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);"></canvas>
+          </div>
+        </fieldset>
+      `;
+
+      const c1Input = container.querySelector('#gc-c1') as HTMLInputElement;
+      const c1Text = container.querySelector('#gc-c1-text') as HTMLInputElement;
+      const c2Input = container.querySelector('#gc-c2') as HTMLInputElement;
+      const c2Text = container.querySelector('#gc-c2-text') as HTMLInputElement;
+      const previewCanvas = container.querySelector('#gc-preview') as HTMLCanvasElement;
+      const previewCtx = previewCanvas.getContext('2d')!;
+
+      const updatePreview = () => {
+        const sz = activeSize;
+        for (let y = 0; y < previewCanvas.height; y += sz) {
+          for (let x = 0; x < previewCanvas.width; x += sz) {
+            const isEven = (Math.floor(x / sz) + Math.floor(y / sz)) % 2 === 0;
+            previewCtx.fillStyle = isEven ? activeColor1 : activeColor2;
+            previewCtx.fillRect(x, y, Math.min(sz, previewCanvas.width - x), Math.min(sz, previewCanvas.height - y));
+          }
+        }
+      };
+
+      c1Input.oninput = () => {
+        activeColor1 = c1Input.value;
+        c1Text.value = activeColor1;
+        updatePreview();
+      };
+      c1Text.oninput = () => {
+        if (/^#[0-9A-Fa-f]{6}$/.test(c1Text.value)) {
+          activeColor1 = c1Text.value;
+          c1Input.value = activeColor1;
+          updatePreview();
+        }
+      };
+
+      c2Input.oninput = () => {
+        activeColor2 = c2Input.value;
+        c2Text.value = activeColor2;
+        updatePreview();
+      };
+      c2Text.oninput = () => {
+        if (/^#[0-9A-Fa-f]{6}$/.test(c2Text.value)) {
+          activeColor2 = c2Text.value;
+          c2Input.value = activeColor2;
+          updatePreview();
+        }
+      };
+
+      const sizeRadios = container.querySelectorAll<HTMLInputElement>('input[name="grid-size"]');
+      sizeRadios.forEach((radio) => {
+        radio.onchange = () => {
+          activeSize = parseInt(radio.value, 10);
+          updatePreview();
+        };
+      });
+
+      const applyPreset = (c1: string, c2: string, sz?: number) => {
+        activeColor1 = c1;
+        activeColor2 = c2;
+        if (sz) activeSize = sz;
+        c1Input.value = c1;
+        c1Text.value = c1;
+        c2Input.value = c2;
+        c2Text.value = c2;
+        sizeRadios.forEach((r) => {
+          r.checked = parseInt(r.value, 10) === activeSize;
+        });
+        updatePreview();
+      };
+
+      (container.querySelector('#preset-classic') as HTMLButtonElement).onclick = () => {
+        applyPreset('#ffffff', '#dcdcdc', 8);
+      };
+      (container.querySelector('#preset-dark') as HTMLButtonElement).onclick = () => {
+        applyPreset('#2d2d2d', '#1a1a1a', 8);
+      };
+      (container.querySelector('#preset-blue') as HTMLButtonElement).onclick = () => {
+        applyPreset('#ffffff', '#c5dfff', 8);
+      };
+      (container.querySelector('#preset-contrast') as HTMLButtonElement).onclick = () => {
+        applyPreset('#ffffff', '#888888', 8);
+      };
+
+      updatePreview();
+
+      return () => {
+        return {
+          size: activeSize,
+          color1: activeColor1,
+          color2: activeColor2
+        };
       };
     });
   }

@@ -4,6 +4,41 @@ import { AnchorPosition, Point, resizeCanvas, stretchImage } from './PixelOps.ts
 
 export type BackgroundType = 'checkerboard' | 'solid';
 
+export interface CheckerSettings {
+  size: number;
+  color1: string;
+  color2: string;
+}
+
+const STORAGE_KEY_CHECKER = 'gmpaint_checker_settings';
+
+export function loadStoredCheckerSettings(): CheckerSettings {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_CHECKER);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.size === 'number' && parsed.color1 && parsed.color2) {
+        return {
+          size: Math.max(2, Math.min(64, Math.round(parsed.size))),
+          color1: parsed.color1,
+          color2: parsed.color2
+        };
+      }
+    }
+  } catch {
+    // fallback
+  }
+  return { size: 8, color1: '#ffffff', color2: '#dcdcdc' };
+}
+
+export function saveStoredCheckerSettings(settings: CheckerSettings): void {
+  try {
+    localStorage.setItem(STORAGE_KEY_CHECKER, JSON.stringify(settings));
+  } catch {
+    // ignorar
+  }
+}
+
 export interface ViewportState {
   zoom: number;
   panX: number;
@@ -46,6 +81,7 @@ export class CanvasEngine {
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private checkerPattern: CanvasPattern | null = null;
+  private checkerSettings: CheckerSettings = loadStoredCheckerSettings();
 
   private listeners: Set<ViewportListener> = new Set();
 
@@ -304,18 +340,31 @@ export class CanvasEngine {
 
   private getCheckerPattern(): CanvasPattern {
     if (!this.checkerPattern) {
+      const { size, color1, color2 } = this.checkerSettings;
+      const patternSize = size * 2;
       const patternCanvas = document.createElement('canvas');
-      patternCanvas.width = 16;
-      patternCanvas.height = 16;
+      patternCanvas.width = patternSize;
+      patternCanvas.height = patternSize;
       const pCtx = patternCanvas.getContext('2d')!;
-      pCtx.fillStyle = '#ffffff';
-      pCtx.fillRect(0, 0, 16, 16);
-      pCtx.fillStyle = '#dcdcdc';
-      pCtx.fillRect(0, 0, 8, 8);
-      pCtx.fillRect(8, 8, 8, 8);
+      pCtx.fillStyle = color1;
+      pCtx.fillRect(0, 0, patternSize, patternSize);
+      pCtx.fillStyle = color2;
+      pCtx.fillRect(0, 0, size, size);
+      pCtx.fillRect(size, size, size, size);
       this.checkerPattern = this.ctx.createPattern(patternCanvas, 'repeat')!;
     }
     return this.checkerPattern;
+  }
+
+  public getCheckerSettings(): CheckerSettings {
+    return { ...this.checkerSettings };
+  }
+
+  public setCheckerSettings(settings: CheckerSettings): void {
+    this.checkerSettings = { ...settings };
+    saveStoredCheckerSettings(this.checkerSettings);
+    this.checkerPattern = null;
+    this.render();
   }
 
   private renderImageBuffer(): void {

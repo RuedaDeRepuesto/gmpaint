@@ -86,6 +86,11 @@ export class ToolBar {
       engine.toggleBackground();
     });
 
+    // 16. Configurar cuadrícula de transparencia
+    this.createBtn(ICONS.gridSettings, 'Configure Transparency Grid', () => {
+      actions.onGridSettings();
+    });
+
     // Suscripción al historial para habilitar/deshabilitar botones
     historyManager.subscribe((canUndo, canRedo) => {
       this.undoBtn.disabled = !canUndo;

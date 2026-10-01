@@ -16,6 +16,7 @@ export const ICONS = {
   zoomEqual: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="#1565c0" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#1565c0" stroke-width="1.8" stroke-linecap="round"/><path d="M5 6H9M5 8H9" stroke="#333333" stroke-width="1.5" stroke-linecap="round"/></svg>`,
   zoomIn: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="#1565c0" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#1565c0" stroke-width="1.8" stroke-linecap="round"/><path d="M7 5V9M5 7H9" stroke="#2e7d32" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   grid: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5H14M2 11H14M5 2V14M11 2V14" stroke="#1565c0" stroke-width="1.5"/></svg>`,
+  gridSettings: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke="#333333" stroke-width="1.2" fill="#ffffff"/><path d="M2 2H8V8H2V2Z" fill="#757575"/><path d="M8 8H14V14H8V8Z" fill="#757575"/><circle cx="11.5" cy="4.5" r="2.5" fill="#f57f17" stroke="#333333" stroke-width="0.8"/></svg>`,
   background: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" fill="#e0e0e0" stroke="#333333"/><path d="M3 13L7 8L10 11L13 7" stroke="#2e7d32" stroke-width="1.5"/><circle cx="5" cy="5" r="1.5" fill="#f57f17"/></svg>`,
 
   // Herramientas de dibujo

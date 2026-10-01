@@ -159,6 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (config) {
         engine.stretchCanvas(config.width, config.height, config.mode);
       }
+    },
+
+    onGridSettings: async () => {
+      const current = engine.getCheckerSettings();
+      const updated = await DialogManager.showGridConfigDialog(current);
+      if (updated) {
+        engine.setCheckerSettings(updated);
+      }
     }
   };
 
