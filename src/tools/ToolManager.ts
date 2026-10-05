@@ -18,7 +18,10 @@ export class ToolManager {
   private listeners: Set<ToolChangeListener> = new Set();
 
   constructor(ctx: ToolContext) {
-    this.ctx = ctx;
+    this.ctx = {
+      ...ctx,
+      setActiveTool: (id: string) => this.setActiveTool(id)
+    };
 
     const defaultTools: ITool[] = [
       new PencilTool(),

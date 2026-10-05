@@ -144,6 +144,10 @@
       "blueprint": "Plano azul",
       "contrast": "Alto contraste",
       "preview": "Vista previa en vivo"
+    },
+    "paste": {
+      "enlargeTitle": "Pegar imagen",
+      "enlargeMessage": "La imagen del portapapeles ({w}x{h} px) es mayor que el lienzo actual ({cw}x{ch} px).<br><br>¿Deseas agrandar el lienzo para que quepa completa?"
     }
   }
 }

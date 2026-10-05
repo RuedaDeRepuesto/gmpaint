@@ -144,6 +144,10 @@
       "blueprint": "Blueprint",
       "contrast": "High Contrast",
       "preview": "Live Preview"
+    },
+    "paste": {
+      "enlargeTitle": "Paste Image",
+      "enlargeMessage": "The clipboard image ({w}x{h} px) is larger than the current canvas ({cw}x{ch} px).<br><br>Do you want to enlarge the canvas to fit the new image?"
     }
   }
 }

@@ -78,9 +78,9 @@ export class ClipboardManager {
   }
 
   /**
-   * Lee una imagen desde el portapapeles del sistema o interno y la pega como capa flotante.
+   * Obtiene la imagen del portapapeles del sistema o interno como ImageData sin pegarla directamente.
    */
-  public async pasteFromSystemOrInternal(targetX: number = 0, targetY: number = 0): Promise<boolean> {
+  public async getImageFromClipboard(): Promise<ImageData | null> {
     try {
       if (navigator.clipboard && navigator.clipboard.read) {
         const items = await navigator.clipboard.read();
@@ -88,43 +88,57 @@ export class ClipboardManager {
           const imageType = item.types.find((type) => type.startsWith('image/'));
           if (imageType) {
             const blob = await item.getType(imageType);
-            const imgData = await imageBlobToImageData(blob);
-            this.selectionManager.paste(imgData, targetX, targetY);
-            return true;
+            return await imageBlobToImageData(blob);
           }
         }
       }
     } catch {
-      // Si el navegador bloquea permisos, usamos el interno
+      // Fallback a portapapeles interno
     }
 
-    const internal = this.selectionManager.getInternalClipboard();
-    if (internal) {
-      this.selectionManager.paste(internal, targetX, targetY);
-      return true;
-    }
-
-    return false;
+    return this.selectionManager.getInternalClipboard();
   }
 
   /**
-   * Maneja el evento nativo paste (Ctrl+V / Cmd+V).
+   * Extrae el ImageData de un evento nativo de pegado (ClipboardEvent).
    */
-  public async handlePasteEvent(event: ClipboardEvent, targetX: number = 0, targetY: number = 0): Promise<boolean> {
+  public async getImageFromPasteEvent(event: ClipboardEvent): Promise<ImageData | null> {
     const items = event.clipboardData?.items;
-    if (!items) return false;
+    if (!items) return null;
 
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.startsWith('image/')) {
         const file = items[i].getAsFile();
         if (file) {
           event.preventDefault();
-          const imgData = await imageBlobToImageData(file);
-          this.selectionManager.paste(imgData, targetX, targetY);
-          return true;
+          return await imageBlobToImageData(file);
         }
       }
     }
-    return false;
+    return null;
+  }
+
+  /**
+   * Lee una imagen desde el portapapeles del sistema o interno y la pega como capa flotante.
+   */
+  public async pasteFromSystemOrInternal(targetX: number = 0, targetY: number = 0): Promise<ImageData | null> {
+    const imgData = await this.getImageFromClipboard();
+    if (imgData) {
+      this.selectionManager.paste(imgData, targetX, targetY);
+      return imgData;
+    }
+    return null;
+  }
+
+  /**
+   * Maneja el evento nativo paste (Ctrl+V / Cmd+V).
+   */
+  public async handlePasteEvent(event: ClipboardEvent, targetX: number = 0, targetY: number = 0): Promise<ImageData | null> {
+    const imgData = await this.getImageFromPasteEvent(event);
+    if (imgData) {
+      this.selectionManager.paste(imgData, targetX, targetY);
+      return imgData;
+    }
+    return null;
   }
 }

@@ -97,6 +97,21 @@ export class DialogManager {
   }
 
   /**
+   * Muestra un diálogo de confirmación (Aceptar / Cancelar) estilo GM8.
+   */
+  public static async showConfirmDialog(title: string, message: string): Promise<boolean> {
+    const result = await this.showModal<boolean>(title, (container) => {
+      container.innerHTML = `
+        <div style="padding: 10px 4px; font-size: 13px; line-height: 1.4; max-width: 340px;">
+          ${message}
+        </div>
+      `;
+      return () => true;
+    });
+    return result === true;
+  }
+
+  /**
    * Diálogo para crear una nueva imagen.
    */
   public static async showNewDialog(defaultW: number = 32, defaultH: number = 32): Promise<NewImageConfig | null> {

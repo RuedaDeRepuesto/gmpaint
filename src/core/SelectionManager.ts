@@ -17,10 +17,15 @@ export class SelectionManager {
   private bounds: SelectionRect | null = null;
   private floating: FloatingLayer | null = null;
   private internalClipboard: ImageData | null = null;
-  private onSelectionChangeCallback?: () => void;
+  private listeners: Set<() => void> = new Set();
+
+  public subscribe(cb: () => void): () => void {
+    this.listeners.add(cb);
+    return () => this.listeners.delete(cb);
+  }
 
   public setOnChange(cb: () => void): void {
-    this.onSelectionChangeCallback = cb;
+    this.subscribe(cb);
   }
 
   public getBounds(): SelectionRect | null {
@@ -277,12 +282,11 @@ export class SelectionManager {
 
   public pointInsideBounds(x: number, y: number): boolean {
     if (!this.bounds) return false;
-    return (
-      x >= this.bounds.x &&
-      x < this.bounds.x + this.bounds.width &&
-      y >= this.bounds.y &&
-      y < this.bounds.y + this.bounds.height
-    );
+    const minX = Math.min(this.bounds.x, this.bounds.x + this.bounds.width);
+    const maxX = Math.max(this.bounds.x, this.bounds.x + this.bounds.width);
+    const minY = Math.min(this.bounds.y, this.bounds.y + this.bounds.height);
+    const maxY = Math.max(this.bounds.y, this.bounds.y + this.bounds.height);
+    return x >= minX && x < maxX && y >= minY && y < maxY;
   }
 
   private cloneImageData(source: ImageData): ImageData {
@@ -292,8 +296,8 @@ export class SelectionManager {
   }
 
   private notify(): void {
-    if (this.onSelectionChangeCallback) {
-      this.onSelectionChangeCallback();
+    for (const listener of this.listeners) {
+      listener();
     }
   }
 }

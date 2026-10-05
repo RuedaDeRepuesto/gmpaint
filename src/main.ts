@@ -63,6 +63,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const handlePastingImageData = async (imgData: ImageData) => {
+    // Si la imagen es más grande que el lienzo actual, preguntar si se desea agrandar el lienzo (fiel a GM8)
+    if (imgData.width > engine.getWidth() || imgData.height > engine.getHeight()) {
+      const confirmResize = await DialogManager.showConfirmDialog(
+        t('dialogs.paste.enlargeTitle'),
+        t('dialogs.paste.enlargeMessage', {
+          w: imgData.width,
+          h: imgData.height,
+          cw: engine.getWidth(),
+          ch: engine.getHeight()
+        })
+      );
+      if (confirmResize) {
+        const newW = Math.max(engine.getWidth(), imgData.width);
+        const newH = Math.max(engine.getHeight(), imgData.height);
+        engine.resizeCanvasWithAnchor(newW, newH, 'top-left');
+      }
+    }
+
+    if (selectionManager.hasFloating()) {
+      selectionManager.commit(engine.getImageData());
+    }
+
+    const posX = Math.max(0, Math.floor((engine.getWidth() - imgData.width) / 2));
+    const posY = Math.max(0, Math.floor((engine.getHeight() - imgData.height) / 2));
+
+    historyManager.pushState(engine.getImageData());
+    selectionManager.paste(imgData, posX, posY);
+    toolManager.setActiveTool('select');
+    engine.render();
+  };
+
   // 4. Implementación de acciones de la aplicación
   const actions: AppActions = {
     onNew: async () => {
@@ -101,11 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     onInsertFromFile: async () => {
       const result = await DialogManager.openImageFileDialog();
       if (!result) return;
-
-      selectionManager.commit(engine.getImageData());
-      historyManager.pushState(engine.getImageData());
-      selectionManager.paste(result.imageData, 0, 0);
-      engine.render();
+      await handlePastingImageData(result.imageData);
     },
 
     onUndo: () => {
@@ -134,8 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     onPaste: async () => {
-      await clipboardManager.pasteFromSystemOrInternal(0, 0);
-      engine.render();
+      const imgData = await clipboardManager.getImageFromClipboard();
+      if (imgData) {
+        await handlePastingImageData(imgData);
+      }
     },
 
     onDelete: () => {
@@ -213,10 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 6. Soporte de pegado global desde otras fuentes (Ctrl+V con imágenes del portapapeles)
   window.addEventListener('paste', async (e: ClipboardEvent) => {
-    const handled = await clipboardManager.handlePasteEvent(e, 0, 0);
-    if (handled) {
-      toolManager.setActiveTool('select');
-      engine.render();
+    const imgData = await clipboardManager.getImageFromPasteEvent(e);
+    if (imgData) {
+      await handlePastingImageData(imgData);
     }
   });
 });

@@ -9,6 +9,7 @@ export interface ToolContext {
   colorManager: ColorManager;
   selectionManager: SelectionManager;
   historyManager: HistoryManager;
+  setActiveTool?: (id: string) => void;
 }
 
 export interface ITool {

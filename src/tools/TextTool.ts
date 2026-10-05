@@ -70,6 +70,9 @@ export class TextTool implements ITool {
 
     ctx.historyManager.pushState(ctx.engine.getImageData());
     ctx.selectionManager.paste(imgData, pos.x, pos.y);
+    if (ctx.setActiveTool) {
+      ctx.setActiveTool('select');
+    }
     ctx.engine.render();
   }
 }
