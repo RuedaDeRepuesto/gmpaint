@@ -4,6 +4,8 @@ Un editor de imágenes y sprites sencillo, directo y sin vueltas, fuertemente in
 
 Este proyecto nació como un experimento personal de fin de semana: una herramienta rápida para abrir un PNG, retocar unos píxeles con clic izquierdo o derecho, rellenar un color, cambiar el tamaño del lienzo con una cuadrícula de anclaje de 3x3 y exportarlo al toque, sin tener que esperar a que abra Photoshop ni lidiar con las mil opciones de editores más pesados.
 
+https://ruedaderepuesto.github.io/gmpaint/
+
 ---
 
 ## 🕹️ La Inspiración: GameMaker 8
